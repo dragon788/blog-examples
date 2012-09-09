@@ -1,0 +1,65 @@
+# http://d-i.alioth.debian.org/manual/en.i386/apb.html
+
+d-i debian-installer/locale string en_US
+d-i keyboard-configuration/xkb-keymap select us
+console-keymaps-at console-keymaps-at/keymap string us
+tasksel tasksel/first multiselect standard
+dash dash/sh boolean false
+
+d-i anna/choose_modules string network-console openssh-client-udeb
+d-i network-console/password password r00+
+d-i network-console/password-again password r00+
+d-i network-console/start note
+
+d-i mirror/country string enter information manually
+d-i mirror/protocol string http
+d-i mirror/http/proxy string
+#d-i mirror/http/hostname string ftp.keystealth.org
+d-i mirror/http/hostname string 192.168.223.108:3142
+d-i mirror/http/directory string /debian
+d-i mirror/suite string wheezy
+
+d-i partman-auto/init_automatically_partition select Guided - use entire disk
+d-i partman-auto/method string regular
+# Automatically partition without confirmation. We don't preseed
+# partman/choose_partition, so the user can confirm/change the partitioning
+# scheme before it's written.
+d-i partman-auto/expert_recipe string boot-root :: 1024 10000 1024 ext3 method{ format } format{ } use_filesystem{ } filesystem{ ext3 } mountpoint{ / } . 2048 10000 2048 ext3 method{ format } format{ } use_filesystem{ } filesystem{ ext3 } mountpoint{ /usr } . 2048 10000 2048 ext3 method{ format } format{ } use_filesystem{ } filesystem{ ext3 } mountpoint{ /tmp } . 256 10000 256 ext3 method{ format } format{ } use_filesystem{ } filesystem{ ext3 } mountpoint{ /home } . 512 10000 1000000000 ext3 method{ format } format{ } use_filesystem{ } filesystem{ ext3 } mountpoint{ /var } . 4096 10000 4096 linux-swap method{ swap } format{ } .
+d-i partman/confirm_write_new_label boolean true
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+
+d-i clock-setup/ntp boolean true
+d-i clock-setup/utc boolean true
+d-i time/zone string UTC
+
+d-i passwd/root-login boolean true
+d-i passwd/make-user boolean false
+d-i passwd/root-password password r00+
+d-i passwd/root-password-again password r00+
+d-i user-setup/allow-password-weak boolean true
+
+d-i base-installer/kernel/linux/initramfs-generators string initramfs-tools
+d-i base-installer/initramfs-tools/driver-policy string generic
+d-i portmap/loopback boolean false
+
+popularity-contest popularity-contest/participate boolean false
+
+d-i apt-setup/non-free boolean true
+d-i apt-setup/services-select string security
+
+d-i pkgsel/include string augeas-tools expect puppet ssh
+d-i pkgsel/update-policy select none
+d-i gpm/device string /dev/input/mice
+d-i gpm/restart boolean false
+d-i gpm/type string autops2
+
+d-i grub-installer/grub2_instead_of_grub_legacy boolean false
+d-i grub-installer/only_debian boolean true
+d-i grub-installer/with_other_os boolean true
+
+# preseed_fetch fails on path-only arguments when preseed/include isn't used,
+# so include an empty preseed file as a work around.
+# http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=573138
+d-i preseed/include string empty
+d-i preseed/late_command string preseed_fetch /preseed/postinst /postinst && chmod 755 /postinst && /postinst && rm /postinst
