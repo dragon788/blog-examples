@@ -311,7 +311,7 @@ sign_cert()
 	# already been signed. Ignore that and sign the cert anyway,
 	# since signing is idempotent.
 	remote_fprint=$(echo "$remote_fprint" | \
-		sed -rn '/^\+?[[:space:]]*"{0,1}'"$HOSTNAME"'"{0,1}[[:space:]]*\((.*)\)[[:space:]]*$/s//\1/p')
+		sed -rn '/^\+?[[:space:]]*"?'"$HOSTNAME"'"?[[:space:]]*\(.*\)[[:space:]]*(.*)[[:space:]]+$/s//\1/p')
 	echo "Parsed remote fingerprint for $HOSTNAME: $remote_fprint" | logger -t di-postinst
 
 	local_fprint=$(
