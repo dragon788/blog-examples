@@ -29,6 +29,10 @@ d-i partman/confirm_write_new_label boolean true
 d-i partman/confirm boolean true
 d-i partman/confirm_nooverwrite boolean true
 
+d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-lvm/confirm boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
+
 d-i clock-setup/ntp boolean true
 d-i clock-setup/utc boolean true
 d-i time/zone string UTC
@@ -57,6 +61,7 @@ d-i gpm/type string autops2
 d-i grub-installer/grub2_instead_of_grub_legacy boolean false
 d-i grub-installer/only_debian boolean true
 d-i grub-installer/with_other_os boolean true
+d-i grub-installer/bootdev string default
 
 # preseed_fetch fails on path-only arguments when preseed/include isn't used,
 # so include an empty preseed file as a work around.

@@ -27,7 +27,7 @@ HOSTNAME=$($CHROOT hostname -f)
 # makes Debconf interaction broken, so we need to stay out of the chroot to
 # use Debconf and have the scripts chroot the parts that are necessary.
 arch=$(uname -m)
-export LD_LIBRARY_PATH=/target/lib:/target/usr/lib:/target/lib/$arch-linux-gnu:/target/usr/lib/$arch-linux-gnu
+export LD_LIBRARY_PATH=/lib:/usr/lib:/lib/$arch-linux-gnu:/usr/lib/$arch-linux-gnu:/target/lib:/target/usr/lib:/target/lib/$arch-linux-gnu:/target/usr/lib/$arch-linux-gnu
 export PATH="$PATH:/target/bin:/target/usr/bin:/target/sbin:/target/usr/sbin"
 
 # Set up the chroot (in particular, mount the various pseudofilesystems),
@@ -174,7 +174,7 @@ ssh_command()
 	# expect(1) can't find its TCL libraries (init.tcl et al)
 	# unless it's chrooted, even when I set TCLLIBPATH.
 	$CHROOT expect <<-EOF_EXPECT
-		set timeout 30
+		set timeout 60
 		log_user 1
 		spawn ssh -to NumberOfPasswordPrompts=1 \
 			-o GlobalKnownHostsFile=$hostkeys_file \
